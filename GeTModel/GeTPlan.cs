@@ -7,10 +7,11 @@ namespace GeTPlanModel
         //  For now supporting only seq plan no hierachy nor schedule
 
         public List<GeTActionInstance> Actions { get; set; }
-
-        public GeTPlan(List<GeTActionInstance> actions)
+        public bool IsTemporal { get; set; }
+        public GeTPlan(List<GeTActionInstance> actions, bool temporal)
         {
             this.Actions = actions;
+            this.IsTemporal = temporal;
         }
 
         public override string ToString()
@@ -30,12 +31,13 @@ namespace GeTPlanModel
         {
             var amf = new ActionInstanceModelFactory();
             var actions = new List<GeTActionInstance>();
+            var temporal = plan.Actions[0].StartTime != null;
             foreach (var action in plan.Actions)
             {
                 var a = amf.FromProto(action);
                 actions.Add(a);
             }
-            return new GeTPlan(actions);
+            return new GeTPlan(actions, temporal);
         }
 
         public Plan ToProto(GeTPlan plan)

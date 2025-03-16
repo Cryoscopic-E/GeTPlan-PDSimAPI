@@ -1,4 +1,5 @@
 using Proto;
+using System.Collections.Generic;
 namespace GeTPlanModel
 {
     public class GeTAtom
@@ -193,6 +194,15 @@ namespace GeTPlanModel
                 },
                 Boolean = model.BooleanValue ?? false
             };
+        }
+    }
+
+    public class GeTRealComparer : IComparer<GeTReal>
+    {
+        public int Compare(GeTReal x, GeTReal y)
+        {
+            // Compare by converting to double for simplicity
+            return x.ToDouble().CompareTo(y.ToDouble());
         }
     }
 

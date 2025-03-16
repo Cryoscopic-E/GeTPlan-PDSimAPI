@@ -76,7 +76,7 @@ namespace GeTPlanModel
             {
                 metrics.Add($"{metric.Key}: {metric.Value}");
             }
-            var plan = new GeTPlan(new List<GeTActionInstance>());
+            var plan = new GeTPlan(new List<GeTActionInstance>(), false);
             if (planGenerationResult.Plan != null)
             {
                 var pmf = new PlanModelFactory();

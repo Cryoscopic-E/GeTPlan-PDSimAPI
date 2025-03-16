@@ -7,7 +7,25 @@ using NExp = NCalc.Expression;
 using System.Diagnostics;
 namespace PDSimAPI
 {
+    public struct WorldStateChange
+    {
+        public GeTEffect AppliedEffect { get; set; }
+        public GeTActionInstance AppliedAction { get; set; }
+        public GeTStateVariable OldStateVar { get; set; }
+        public GeTStateVariable NewStateVar { get; set; }
+        public WorldStateChange(GeTEffect effect, GeTActionInstance action, GeTStateVariable oldStateVar, GeTStateVariable newStateVar)
+        {
+            AppliedEffect = effect;
+            AppliedAction = action;
+            OldStateVar = oldStateVar;
+            NewStateVar = newStateVar;
+        }
 
+        public override string ToString()
+        {
+            return $"Applied Effect: {AppliedEffect}\nApplied Action: {AppliedAction}\nOld State Variable: {OldStateVar}\nNew State Variable: {NewStateVar}";
+        }
+    }
     public class WorldState
     {
 
@@ -114,7 +132,7 @@ namespace PDSimAPI
         /// <param name="effect">The effect to evaluate</param>
         /// <param name="actionInstance">The plan action to execute</param>
 
-        public void Apply(GeTEffect effect, GeTAction actionModel, GeTActionInstance actionInstance)
+        public WorldStateChange Apply(GeTEffect effect, GeTAction actionModel, GeTActionInstance actionInstance)
         {   
             var fluent = GroundExpressionFromEffect(effect, actionInstance);
             var newValue = effect.EffectExpression.Value;
@@ -122,14 +140,15 @@ namespace PDSimAPI
             // Case grounded gives NONE when compiling ADL just used the grounded version
             if (Query(fluent).Equals(AtomModelFactory.NONE()))
             {
-                Console.WriteLine($"Current: {effect.EffectExpression.Fluent} := {Query(effect.EffectExpression.Fluent)}");
-                var stateVariable = new GeTStateVariable(effect.EffectExpression.Fluent, newValue);
-                Update(stateVariable);
-                Console.WriteLine($"Updated: {stateVariable}");
-                return;
-            }
+                var fluentChange = effect.EffectExpression.Fluent;
+                var oldValue = new GeTExpression(Query(fluentChange), ExpressionKind.Constant);
+               
+                var newStateVariable = new GeTStateVariable(effect.EffectExpression.Fluent, newValue);
+                Update(newStateVariable);
 
-            Console.WriteLine($"Current: {fluent} := {Query(fluent)}");
+                return new WorldStateChange(effect, actionInstance, new GeTStateVariable(fluentChange, oldValue), newStateVariable);
+            }
+            var oldStateVariable = new GeTStateVariable(fluent, new GeTExpression(Query(fluent), ExpressionKind.Constant));
 
             if (newValue.Kind == ExpressionKind.FunctionApplication)
             {
@@ -141,28 +160,24 @@ namespace PDSimAPI
                 var t = VisitFunctionApplication(newValue, actionModel, actionInstance);
                 var result = PrefixToInfixConverter.Convert(t[0]);
                 var resultValue = Convert.ToDouble(new NExp(result).Evaluate());
+                var currentValue = Query(fluent).GetValue();
+
+
                 if (effect.EffectExpression.Kind == EffectExpressionKind.INCREMENT)
-                {
-                    var currentValue = Query(fluent).GetValue();
                     resultValue = Convert.ToDouble(currentValue) + resultValue;
                    
-                }
                 else if (effect.EffectExpression.Kind == EffectExpressionKind.DECREMENT)
-                {
-                    var currentValue = Query(fluent).GetValue();
                     resultValue = Convert.ToDouble(currentValue) - resultValue;
-                }
+                
                 var resultValueAtom = AtomModelFactory.Create(resultValue);
                 var resultValueExpression = new GeTExpression(resultValueAtom, ExpressionKind.Constant);
                 var stateVariable = new GeTStateVariable(fluent, resultValueExpression);
                 Update(stateVariable);
 
+                return new WorldStateChange(effect, actionInstance, oldStateVariable, stateVariable);
             }
-            else
+            else if (newValue.Kind == ExpressionKind.StateVariable)
             {
-             
-                if (newValue.Kind == ExpressionKind.StateVariable)
-                {
                     var paramList = new List<string>();
                     foreach (var exp in newValue.SubExpressions)
                     {
@@ -173,11 +188,39 @@ namespace PDSimAPI
                     var f = ExpressionModelFactory.CreateGroundFluent(newValue.FluentName, paramList);
                     var value = Query(f);
                     newValue = new GeTExpression(value, ExpressionKind.Constant);
-                }
+                
                 var stateVariable = new GeTStateVariable(fluent, newValue);
                 Update(stateVariable);
+
+                return new WorldStateChange(effect, actionInstance, oldStateVariable, stateVariable);
             }
-            Console.WriteLine($"Updated: {fluent} := {Query(fluent)}");
+            else // Constant
+            {
+
+                // Check if assignment or increment/decrement
+                if (effect.EffectExpression.Kind == EffectExpressionKind.ASSIGNMENT)
+                {
+                    var stateVariable = new GeTStateVariable(fluent, newValue);
+                    Update(stateVariable);
+                    return new WorldStateChange(effect, actionInstance, oldStateVariable, stateVariable);
+                }
+                else
+                {
+                    var currentValue = Query(fluent).GetValue();
+                    var resultValue = 0.0;
+                    if (effect.EffectExpression.Kind == EffectExpressionKind.INCREMENT)
+                        resultValue = Convert.ToDouble(currentValue) + Convert.ToDouble(newValue.Atom.GetValue());
+                    else if (effect.EffectExpression.Kind == EffectExpressionKind.DECREMENT)
+                        resultValue = Convert.ToDouble(currentValue) - Convert.ToDouble(newValue.Atom.GetValue());
+                    var resultValueAtom = AtomModelFactory.Create(resultValue);
+                    var resultValueExpression = new GeTExpression(resultValueAtom, ExpressionKind.Constant);
+
+                    var stateVariable = new GeTStateVariable(fluent, resultValueExpression);
+                    Update(stateVariable);
+                    return new WorldStateChange(effect, actionInstance, oldStateVariable, stateVariable);
+                }
+            }
+
         }
             
         private GeTExpression GroundExpressionFromEffect(GeTEffect effect, GeTActionInstance actionInstance)
@@ -268,6 +311,6 @@ namespace PDSimAPI
         {
             State.Clear();
         }
-
     }
+
 }

@@ -14,7 +14,7 @@ namespace PDSimCLI
 
             var problem = new ProtobufRequest("problem");
             var problemResponse = problem.Connect();
-            
+
 
 
             var plan = new ProtobufRequest("plan");
@@ -71,21 +71,62 @@ namespace PDSimCLI
 
             Console.WriteLine("\n\n### PLAN ###\n");
             var planParser = PlanGenerationResult.Parser.ParseFrom(planResponse);
-
             var pgrmf = new PlanGenResultModelFactory();
             var genResult = pgrmf.FromProto(planParser);
 
-            foreach (var actionInstance in genResult.Plan.Actions)
-            {
-                var actionModel = actionDict[actionInstance.ActionName];
+            var plan = genResult.Plan.Actions;
+            var timed = genResult.Plan.IsTemporal;
 
-                foreach(var effect in actionModel.effects)
-                {
-                    Console.WriteLine(effect);
-                    worldState.Apply(effect, actionModel, actionInstance);
-                    Console.WriteLine();
-                }
+            var timeLine = new TimeLine(plan, timed);
+
+            timeLine.ActionStarted += OnActionStart;
+            timeLine.ActionCompleted += OnActionComplete;
+            timeLine.TimelineAdvanced += OnTimelineAdvanced;
+
+
+            while (timeLine.MoveNext())
+            {
+                Debug.WriteLine("Timeline advanced");
             }
+            ////check if the plan is temporal
+            //if (genResult.Plan.IsTemporal)
+            //{
+            //    Console.WriteLine("Temporal Plan");
+            //    foreach (var actionInstance in planParser.Plan.Actions)
+            //    {
+
+            //    }
+            //}
+            //else
+            //{
+            //    foreach (var actionInstance in genResult.Plan.Actions)
+            //    {
+            //        var actionModel = actionDict[actionInstance.ActionName];
+
+            //        foreach (var effect in actionModel.effects)
+            //        {
+            //            var worldChange = worldState.Apply(effect, actionModel, actionInstance);
+            //            Console.WriteLine(worldChange);
+            //        }
+            //    }
+            //}
+
+        }
+
+        // Timeline events
+        static void OnActionStart(object sender, ActionEventArgs args)
+        {
+            Console.WriteLine($"Action started: {args.Action}");
+        }
+
+        static void OnActionComplete(object sender, ActionEventArgs args)
+        {
+            Console.WriteLine($"Action completed: {args.Action}");
+        }
+
+        static void OnTimelineAdvanced(object sender, TimelineEventArgs args)
+        {
+            Console.WriteLine($"Timeline advanced to: {args.Time}");
         }
     }
 }
