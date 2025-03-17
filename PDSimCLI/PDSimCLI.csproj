@@ -8,6 +8,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="System.Console" Version="4.3.1" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\GeTModel\GeTModel.csproj" />
     <ProjectReference Include="..\PDSimAPI\PDSimAPI.csproj" />
   </ItemGroup>

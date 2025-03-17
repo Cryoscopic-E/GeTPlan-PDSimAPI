@@ -3,8 +3,9 @@ using Proto;
 using System;
 using System.Collections.Generic;
 using PDSimAPI.Utils;
-using NExp = NCalc.Expression;
-using System.Diagnostics;
+using System.Data;
+
+
 namespace PDSimAPI
 {
     public struct WorldStateChange
@@ -132,7 +133,7 @@ namespace PDSimAPI
         /// <param name="effect">The effect to evaluate</param>
         /// <param name="actionInstance">The plan action to execute</param>
 
-        public WorldStateChange Apply(GeTEffect effect, GeTAction actionModel, GeTActionInstance actionInstance)
+        public WorldStateChange Apply(GeTEffect effect, GeTAction actionDefinition, GeTActionInstance actionInstance)
         {   
             var fluent = GroundExpressionFromEffect(effect, actionInstance);
             var newValue = effect.EffectExpression.Value;
@@ -157,9 +158,9 @@ namespace PDSimAPI
                 {
                     expValue.Add(exp.ToString());
                 }
-                var t = VisitFunctionApplication(newValue, actionModel, actionInstance);
+                var t = VisitFunctionApplication(newValue, actionDefinition, actionInstance);
                 var result = PrefixToInfixConverter.Convert(t[0]);
-                var resultValue = Convert.ToDouble(new NExp(result).Evaluate());
+                var resultValue = Convert.ToDouble(new DataTable().Compute(result, null));
                 var currentValue = Query(fluent).GetValue();
 
 
@@ -182,7 +183,7 @@ namespace PDSimAPI
                     foreach (var exp in newValue.SubExpressions)
                     {
                         // infer the value of the action instance parameter checking the index of the parameter in the action model
-                        var parameter = actionModel.parameters.FindIndex(p => p.Name == exp.Parameter.Name);
+                        var parameter = actionDefinition.parameters.FindIndex(p => p.Name == exp.Parameter.Name);
                         paramList.Add(actionInstance.parameters[parameter].Symbol);
                     }
                     var f = ExpressionModelFactory.CreateGroundFluent(newValue.FluentName, paramList);

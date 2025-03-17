@@ -61,13 +61,11 @@ namespace PDSimAPI
                 {
                     if (socket.TryReceiveFrameString(TimeSpan.FromMilliseconds(5000), out var response))
                     {
-                        //Debug.Log("Received response: " + response);
                         jsonResponse = JObject.Parse(response);
                         received = true;
                     }
                     else
                     {
-                        //Debug.LogWarning("No response received");
                         break;
                     }
                 }
@@ -110,18 +108,14 @@ namespace PDSimAPI
                 {
                     if (socket.TryReceiveFrameBytes(TimeSpan.FromMilliseconds(10000), out var response))
                     {
-                        //Debug.Log("Received response: " + response);
                         byteResponse = response;
                         received = true;
                     }
                     else
                     {
-                        //Debug.LogWarning("No response received");
                         break;
                     }
                 }
-
-
             }
 
             NetMQConfig.Cleanup();
