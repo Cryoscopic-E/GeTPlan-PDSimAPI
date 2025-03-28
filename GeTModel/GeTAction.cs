@@ -2,24 +2,33 @@ using System.Collections.Generic;
 using Proto;
 namespace GeTPlanModel
 {
+    /// <summary>
+    /// GeT Action
+    /// 
+    /// Represents an action in the planning problem.
+    /// <example>
+    /// Definition example: 
+    /// <code>
+    ///     stack(?x - block, ?y - block)
+    ///         preconditions: (clear ?x) & (holding ?y)
+    ///         effects: (clear ?y) & (on ?x ?y)
+    /// </code>
+    /// </example>
+    /// </summary>
+    [System.Serializable]
     public class GeTAction
     {
         public string actionName;
         public List<GeTParameter> parameters;
-        public GeTDuration? duration; // Make duration nullable
+        public GeTDuration? duration;
         public List<GeTCondition> conditions;
         public List<GeTEffect> effects;
-
-        //Definition example: stack(x - block, y - block)
-        //Action Instance example: stack(A,B)
-        //Effect Definition: on(x,y) [0,1]
-        //Effect Definition: clear(x) [0]
-        //Effect Definition: ¬clear(y) [1]
+        
         public GeTAction(string actionName,
                         List<GeTParameter> parameters,
                         List<GeTCondition> conditions,
                         List<GeTEffect> effects,
-                        GeTDuration? duration = null) // Make duration nullable
+                        GeTDuration? duration = null)
         {
             this.actionName = actionName;
             this.parameters = parameters;

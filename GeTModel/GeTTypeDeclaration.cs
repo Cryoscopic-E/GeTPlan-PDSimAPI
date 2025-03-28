@@ -1,6 +1,7 @@
 using Proto;
 namespace GeTPlanModel
 {
+    [System.Serializable]
     public class GeTTypeDeclaration
     {
         public string TypeName { get; set; }

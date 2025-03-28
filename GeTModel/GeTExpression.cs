@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Proto;
 namespace GeTPlanModel
 {
+    [System.Serializable]
     public class GeTExpression
     {
         public GeTAtom? Atom { get; private set; }  // For constants
@@ -151,6 +152,23 @@ namespace GeTPlanModel
             }
 
             return hash;
+        }
+    }
+
+    /// <summary>
+    /// A simple model for representing the expression string to avoid serialization issues
+    /// i.e. Unity serialisation depth limit is 10
+    /// </summary>
+    [System.Serializable]
+    public class GeTExpressionString
+    {
+        public string? Expression { get; private set; }
+
+        public GeTExpressionString(GeTExpression expression)
+        {
+            if (expression != null)
+                Expression = expression.ToString();
+            Expression = "Unknown";
         }
     }
 

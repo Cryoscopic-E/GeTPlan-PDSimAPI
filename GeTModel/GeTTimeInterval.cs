@@ -2,6 +2,7 @@ using Proto;
 
 namespace GeTPlanModel
 {
+    [System.Serializable]
     public class GeTTimeInterval
     {
         public bool leftOpen { get; set; }

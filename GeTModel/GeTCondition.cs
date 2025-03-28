@@ -1,15 +1,17 @@
 using Proto;
 namespace GeTPlanModel
 {
+    [System.Serializable]
     public class GeTCondition
     {
         public GeTExpression Condition { get; set; }
-
+        public GeTExpressionString ConditionString { get; set; }
         public GeTTimeInterval? Span { get; set; }
 
         public GeTCondition(GeTExpression condition, GeTTimeInterval? span = null)
         {
             Condition = condition;
+            ConditionString = new GeTExpressionString(condition);
             Span = span;
         }
 

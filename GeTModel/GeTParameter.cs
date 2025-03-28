@@ -1,6 +1,7 @@
 using Proto;
 namespace GeTPlanModel
 {
+    [System.Serializable]
     public class GeTParameter
     {
         public string Name { get; private set; }

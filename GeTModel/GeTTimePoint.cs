@@ -3,6 +3,7 @@ using System;
 
 namespace GeTPlanModel
 {
+    [System.Serializable]
     public enum TimepointKind
     {
         GLOBAL_START,
@@ -11,6 +12,7 @@ namespace GeTPlanModel
         END
     }
 
+    [System.Serializable]
     public class GeTTimePoint
     {
         public TimepointKind type;

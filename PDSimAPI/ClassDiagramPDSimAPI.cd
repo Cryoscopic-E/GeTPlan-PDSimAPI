@@ -1,0 +1,114 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="PDSimAPI.NetMqClient&lt;T&gt;">
+    <Position X="3.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAEAgQAABAAICAAAAAAAAIAAAAQAAAAAA=</HashCode>
+      <FileName>Connection.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PDSimAPI.NetMqClientJson">
+    <Position X="2" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Connection.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PDSimAPI.NetMqClientBytes">
+    <Position X="4.25" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Connection.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PDSimAPI.BackendTestConnectionRequest">
+    <Position X="1.5" Y="6" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Connection.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PDSimAPI.ProtobufRequest">
+    <Position X="4.25" Y="6" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Connection.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PDSimAPI.TimeLine">
+    <Position X="11.75" Y="1" Width="1.75" />
+    <NestedTypes>
+      <Enum Name="PDSimAPI.TimeLine.TimelineEventType" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>TimeLine.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+      <Class Name="PDSimAPI.TimeLine.TimelineEvent" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>TimeLine.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AICAAAAAIAAABAJAAAACAgAAIAAAAACRpAAAgAAAACA=</HashCode>
+      <FileName>TimeLine.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PDSimAPI.ActionEventArgs">
+    <Position X="8" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQ=</HashCode>
+      <FileName>TimeLine.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PDSimAPI.EffectEventArgs">
+    <Position X="10" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQ=</HashCode>
+      <FileName>TimeLine.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PDSimAPI.TimelineEventArgs">
+    <Position X="7.75" Y="3.75" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAQA=</HashCode>
+      <FileName>TimeLine.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PDSimAPI.Visualisation">
+    <Position X="14" Y="1" Width="2.25" />
+    <NestedTypes>
+      <Class Name="PDSimAPI.Visualisation.VisualisationState" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Visualisation.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AIAhAQAIIEIAFAIIAAIKAgEAIQQAAIEAAAAACAhIIAA=</HashCode>
+      <FileName>Visualisation.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PDSimAPI.WorldState">
+    <Position X="16.75" Y="1" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAYAAAAAABAggAAEgAIAAABAQAAgAIgAAAAABAAQAiA=</HashCode>
+      <FileName>WorldState.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GeTPlanModel.GeTActionInstance" Collapsed="true">
+    <Position X="6.5" Y="7.25" Width="1.75" />
+    <TypeIdentifier />
+  </Class>
+  <Struct Name="PDSimAPI.WorldStateChange">
+    <Position X="9.5" Y="7.25" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAEAAAAAQAAAEAAAAAAQAAAAAAEAAAAAAAAAAAAA=</HashCode>
+      <FileName>WorldState.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="AppliedAction" />
+    </ShowAsAssociation>
+  </Struct>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

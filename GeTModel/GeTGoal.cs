@@ -1,15 +1,19 @@
 using Proto;
 namespace GeTPlanModel
 {
+    [System.Serializable]
     public class GeTGoal
     {
         public GeTExpression GoalExpression { get; set; }
+        public GeTExpressionString GoalExpressionString { get; set; }
         public GeTTimeInterval? Timing { get; set; }
 
         public GeTGoal(GeTExpression goalExpression, GeTTimeInterval? timing = null)
         {
             this.GoalExpression = goalExpression;
             this.Timing = timing;
+
+            GoalExpressionString = new GeTExpressionString(goalExpression);
         }
 
         public override string ToString()

@@ -5,6 +5,7 @@ using System.Text;
 
 namespace GeTPlanModel
 {
+    [System.Serializable]
     public enum LogMessageLevel
     {
         Debug,
@@ -12,6 +13,7 @@ namespace GeTPlanModel
         Warning,
         Error
     }
+    [System.Serializable]
     public class GeTLogMessage
     {
         public LogMessageLevel LogMessageType { get; set; }

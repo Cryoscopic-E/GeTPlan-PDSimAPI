@@ -2,16 +2,30 @@ using Proto;
 using System.Collections.Generic;
 namespace GeTPlanModel
 {
+    [System.Serializable]
     public class GeTStateVariable
     {
         public GeTExpression Fluent { get; set; }
+        public GeTExpressionString FluentString { get; set; }
         public GeTExpression Value { get; set; }
+        public GeTExpressionString ValueString { get; set; }
         public GeTStateVariable(GeTExpression fluent, GeTExpression value)
         {
             Fluent = fluent;
             Value = value;
+            FluentString = new GeTExpressionString(fluent);
+            ValueString = new GeTExpressionString(value);
         }
 
+        public List<string> GetParameters()
+        {
+            var p = new List<string>();
+            foreach (var parameter in Fluent.SubExpressions)
+            {
+                p.Add(parameter.ToString());
+            }
+            return p;
+        }
         public override string ToString()
         {
             return $"{Fluent} := {Value}";

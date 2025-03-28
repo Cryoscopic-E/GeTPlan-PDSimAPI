@@ -1,6 +1,7 @@
 using Proto;
 namespace GeTPlanModel
 {
+    [System.Serializable]
     public class GeTDuration
     {
         public GeTInterval Interval { get; set; }

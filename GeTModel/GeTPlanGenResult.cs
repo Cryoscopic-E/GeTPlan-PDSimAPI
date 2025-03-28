@@ -2,7 +2,7 @@ using Proto;
 using System.Collections.Generic;
 namespace GeTPlanModel
 {
-
+    [System.Serializable]
     public enum PlanGenStatus
     {
         SolvedSatisficing,
@@ -15,7 +15,7 @@ namespace GeTPlanModel
         UnsupportedProblem,
         Intermediate
     }
-
+    [System.Serializable]
     public class GeTPlanGenResult
     {
         public PlanGenStatus PlanGenStatus { get; set; }

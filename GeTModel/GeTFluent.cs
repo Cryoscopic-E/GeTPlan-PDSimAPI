@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Proto;
 namespace GeTPlanModel
 {
+    [System.Serializable]
     public enum ValueType
     {
         Int,
@@ -9,13 +10,14 @@ namespace GeTPlanModel
         Boolean,
         Symbol
     }
-
+    [System.Serializable]
     public class GeTFluent
     {
         public string Name { get; private set; }
-        public ValueType FluentValueType { get; private set; }  // Changed to use ValueType enum
+        public ValueType FluentValueType { get; private set; }
         public List<GeTParameter> Parameters { get; private set; }
         public GeTExpression? DefaultValue { get; private set; }
+        public GeTExpressionString DefaultString { get; private set; }
 
         public GeTFluent(string name, ValueType valueType, List<GeTParameter> parameters, GeTExpression? defaultValue = null)
         {
@@ -23,6 +25,7 @@ namespace GeTPlanModel
             FluentValueType = valueType;
             Parameters = parameters ?? new List<GeTParameter>();
             DefaultValue = defaultValue;
+            DefaultString = new GeTExpressionString(defaultValue);
         }
 
         public override string ToString()

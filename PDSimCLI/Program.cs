@@ -33,8 +33,6 @@ namespace PDSimCLI
             var plan = new ProtobufRequest("plan");
             var planResponse = plan.Connect();
 
-
-
             var visualisation = new Visualisation(problemResponse, planResponse);
             visualisation.WorldStateChanged += (sender, e) =>
             {

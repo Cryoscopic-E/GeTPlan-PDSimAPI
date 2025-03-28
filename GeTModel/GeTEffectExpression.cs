@@ -2,20 +2,24 @@ using System.Collections.Generic;
 using Proto;
 namespace GeTPlanModel
 {
+    [System.Serializable]
     public enum EffectExpressionKind
     {
         ASSIGNMENT,
         INCREMENT,
         DECREMENT
     }
-
+    [System.Serializable]
     public class GeTEffectExpression
     {
         public EffectExpressionKind Kind { get; set; }
         public GeTExpression Fluent { get; set; }
+        public GeTExpressionString FluentString { get; set; }
         public GeTExpression Value { get; set; }
+        public GeTExpressionString ValueString { get; set; }
         // If the effect is conditional
         public GeTExpression Condition { get; set; }
+        public GeTExpressionString ConditionString { get; set; }
         // we shouldn't receive nor need this in PDSim as the server compiles the problem to relax the adls
         public List<GeTExpression> Forall { get; set; }
 
@@ -27,6 +31,10 @@ namespace GeTPlanModel
             Value = value;
             Condition = condition;
             Forall = forall;
+
+            FluentString = new GeTExpressionString(fluent);
+            ValueString = new GeTExpressionString(value);
+            ConditionString = new GeTExpressionString(condition);
         }
 
         public override string ToString()

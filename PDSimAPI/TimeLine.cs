@@ -10,6 +10,7 @@ namespace PDSimAPI
         public List<GeTActionInstance> Plan { get; set; }
         private SortedDictionary<GeTReal, List<TimelineEvent>> timelineEvents;
         private GeTReal currentTime;
+        private GeTReal lastTime;
 
         // Events for timeline notifications
         public event EventHandler<ActionEventArgs> ActionStarted;
@@ -25,6 +26,11 @@ namespace PDSimAPI
         }
 
         public GeTReal CurrentTime => currentTime;
+
+        public int GetTotalTimeSteps()
+        {
+            return timelineEvents.Count;
+        }
 
         private void InitializeTimeline(bool timedPlan, Dictionary<string, List<GeTEffect>> actionEffects)
         {
@@ -59,6 +65,7 @@ namespace PDSimAPI
                     // Fake current time advancement as the action is instantaneous
                     time = RealModelFactory.Create(time.ToDouble() + 1.0d);
                 }
+                lastTime = time;
                 return;
             }
             // Plan is timed
@@ -119,6 +126,7 @@ namespace PDSimAPI
                     }
                 }
             }
+            lastTime = timelineEvents.Keys.Last();
         }
 
         private void AddEvent(GeTReal time, TimelineEvent timelineEvent)
@@ -136,6 +144,7 @@ namespace PDSimAPI
             var nextTimePoints = timelineEvents.Keys.Where(time => time.ToDouble() > currentTime.ToDouble()).ToList();
             if (nextTimePoints.Count == 0)
                 return false;
+            
 
             var nextTime = nextTimePoints.First();
             currentTime = nextTime;
@@ -144,7 +153,7 @@ namespace PDSimAPI
             if (timelineEvents.TryGetValue(nextTime, out var events))
             {
                 // Raise the TimelineAdvanced event
-                OnTimelineAdvanced(new TimelineEventArgs { Time = nextTime });
+                OnTimelineAdvanced(new TimelineEventArgs { Time = nextTime, Progress = nextTime.ToDouble()/lastTime.ToDouble()});
 
                 // First process all start events
                 foreach (var evt in events.Where(e => e.EventType == TimelineEventType.ActionStart))
@@ -218,7 +227,7 @@ namespace PDSimAPI
     }
 
     // Event argument classes
-    public class ActionEventArgs : EventArgs
+    public class  ActionEventArgs : EventArgs
     {
         public GeTActionInstance Action { get; set; }
     }
@@ -232,5 +241,6 @@ namespace PDSimAPI
     public class TimelineEventArgs : EventArgs
     {
         public GeTReal Time { get; set; }
+        public double Progress { get; set; }
     }
 }

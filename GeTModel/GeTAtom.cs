@@ -2,6 +2,7 @@ using Proto;
 using System.Collections.Generic;
 namespace GeTPlanModel
 {
+    [System.Serializable]
     public class GeTAtom
     {
         public string? Symbol { get; private set; }
@@ -56,6 +57,7 @@ namespace GeTPlanModel
     }
 
     // A simple model for representing the Real number (fraction)
+    [System.Serializable]
     public class GeTReal
     {
         public long Numerator { get; set; }

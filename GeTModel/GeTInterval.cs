@@ -5,12 +5,15 @@ using System.Text;
 
 namespace GeTPlanModel
 {
+    [System.Serializable]
     public class GeTInterval
     {
         public bool LeftOpen { get; set; }
         public bool RightOpen { get; set; }
         public GeTExpression LowerBound { get; set; }
+        public GeTExpressionString LowerBoundString { get; set; }
         public GeTExpression UpperBound { get; set; }
+        public GeTExpressionString UpperBoundString { get; set; }
 
 
         public GeTInterval(bool leftOpen, bool rightOpen, GeTExpression lowerBound, GeTExpression upperBound)
@@ -19,6 +22,9 @@ namespace GeTPlanModel
             this.RightOpen = rightOpen;
             this.LowerBound = lowerBound;
             this.UpperBound = upperBound;
+
+            LowerBoundString = new GeTExpressionString(lowerBound);
+            UpperBoundString = new GeTExpressionString(upperBound);
         }
 
         public override string ToString()

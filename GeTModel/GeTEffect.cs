@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Proto;
 namespace GeTPlanModel
 {
+    [System.Serializable]
     public class GeTEffect
     {
         public GeTEffectExpression EffectExpression { get; set; }

@@ -21,6 +21,7 @@ namespace PDSimAPI
         public Dictionary<string, List<GeTEffect>> ActionsEffects { get; private set; }
         public WorldState CurrentWorldState { get; private set; }
         public TimeLine TimeLine { get; private set; }
+        public bool IsTimedPlan { get; private set; }
 
         // Visualisation Events
 
@@ -98,6 +99,8 @@ namespace PDSimAPI
             var pgrmf = new PlanGenResultModelFactory();
             PlanGeneration = pgrmf.FromProto(planParser);
 
+            IsTimedPlan = PlanGeneration.Plan.IsTemporal;
+
             TimeLine = new TimeLine(PlanGeneration.Plan.Actions, PlanGeneration.Plan.IsTemporal, ActionsEffects);
             TimeLine.ActionStarted += OnActionStarted;
             TimeLine.ActionCompleted += OnActionCompleted;
@@ -109,17 +112,6 @@ namespace PDSimAPI
 
         private void OnActionStarted(object sender, ActionEventArgs args)
         {
-            //// Add action to current actions
-            //VisState.CurrentActions.Add(args.Action);
-            //// Apply effects
-            //var actionDefinition = ActionsDefinitions[args.Action.ActionName];
-            //var actionInstance = args.Action;
-
-            //foreach (var effect in actionDefinition.effects)
-            //{
-            //    var stateChange = CurrentWorldState.Apply(effect, actionDefinition, args.Action);
-            //    WorldStateChanged?.Invoke(this, stateChange); // Maybe move this to action completed? need to think about this
-            //}
             ActionStarted?.Invoke(this, args.Action);
         }
 

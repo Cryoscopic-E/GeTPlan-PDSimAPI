@@ -2,6 +2,7 @@ using Proto;
 
 namespace GeTPlanModel
 {
+    [System.Serializable]
     public class GeTTiming
     {
         public GeTTimePoint timePoint { get; set; }
