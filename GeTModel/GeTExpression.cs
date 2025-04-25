@@ -51,7 +51,7 @@ namespace GeTPlanModel
                 case ExpressionKind.Constant:
                     return Atom != null ? Atom.ToString() : "Unknown";
                 case ExpressionKind.Parameter:
-                    return $"{Parameter}";
+                    return $"{Parameter?.Name}";
                 case ExpressionKind.FluentSymbol:
                     return $"{FluentName}";
                 case ExpressionKind.FunctionApplication:
@@ -191,7 +191,7 @@ namespace GeTPlanModel
         public GeTExpression FromProto(Expression expression)
         {
             if (expression == null) return null;
-            
+
             var amf = new AtomModelFactory();
 
             switch (expression.Kind)
@@ -233,7 +233,7 @@ namespace GeTPlanModel
 
             var amf = new AtomModelFactory();
             var protoExpression = new Expression();
-            
+
             switch (expression.Kind)
             {
                 case ExpressionKind.Constant:

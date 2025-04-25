@@ -134,17 +134,17 @@ namespace PDSimAPI
         /// <param name="actionInstance">The plan action to execute</param>
 
         public WorldStateChange Apply(GeTEffect effect, GeTAction actionDefinition, GeTActionInstance actionInstance)
-        {   
+        {
             var fluent = GroundExpressionFromEffect(effect, actionInstance);
             var newValue = effect.EffectExpression.Value;
-            
-            // Case grounded gives NONE when compiling ADL just used the grounded version
+
+            // Case grounded gives NONE when compiling ADL just used the grounded version or planner not considering defaults
             if (Query(fluent).Equals(AtomModelFactory.NONE()))
             {
                 var fluentChange = effect.EffectExpression.Fluent;
                 var oldValue = new GeTExpression(Query(fluentChange), ExpressionKind.Constant);
-               
-                var newStateVariable = new GeTStateVariable(effect.EffectExpression.Fluent, newValue);
+
+                var newStateVariable = new GeTStateVariable(fluent, newValue);
                 Update(newStateVariable);
 
                 return new WorldStateChange(effect, actionInstance, new GeTStateVariable(fluentChange, oldValue), newStateVariable);
@@ -166,10 +166,10 @@ namespace PDSimAPI
 
                 if (effect.EffectExpression.Kind == EffectExpressionKind.INCREMENT)
                     resultValue = Convert.ToDouble(currentValue) + resultValue;
-                   
+
                 else if (effect.EffectExpression.Kind == EffectExpressionKind.DECREMENT)
                     resultValue = Convert.ToDouble(currentValue) - resultValue;
-                
+
                 var resultValueAtom = AtomModelFactory.Create(resultValue);
                 var resultValueExpression = new GeTExpression(resultValueAtom, ExpressionKind.Constant);
                 var stateVariable = new GeTStateVariable(fluent, resultValueExpression);
@@ -179,17 +179,17 @@ namespace PDSimAPI
             }
             else if (newValue.Kind == ExpressionKind.StateVariable)
             {
-                    var paramList = new List<string>();
-                    foreach (var exp in newValue.SubExpressions)
-                    {
-                        // infer the value of the action instance parameter checking the index of the parameter in the action model
-                        var parameter = actionDefinition.parameters.FindIndex(p => p.Name == exp.Parameter.Name);
-                        paramList.Add(actionInstance.parameters[parameter].Symbol);
-                    }
-                    var f = ExpressionModelFactory.CreateGroundFluent(newValue.FluentName, paramList);
-                    var value = Query(f);
-                    newValue = new GeTExpression(value, ExpressionKind.Constant);
-                
+                var paramList = new List<string>();
+                foreach (var exp in newValue.SubExpressions)
+                {
+                    // infer the value of the action instance parameter checking the index of the parameter in the action model
+                    var parameter = actionDefinition.parameters.FindIndex(p => p.Name == exp.Parameter.Name);
+                    paramList.Add(actionInstance.parameters[parameter].Symbol);
+                }
+                var f = ExpressionModelFactory.CreateGroundFluent(newValue.FluentName, paramList);
+                var value = Query(f);
+                newValue = new GeTExpression(value, ExpressionKind.Constant);
+
                 var stateVariable = new GeTStateVariable(fluent, newValue);
                 Update(stateVariable);
 
@@ -223,7 +223,7 @@ namespace PDSimAPI
             }
 
         }
-            
+
         private GeTExpression GroundExpressionFromEffect(GeTEffect effect, GeTActionInstance actionInstance)
         {
             // Create an expression with the action parameters
@@ -231,7 +231,7 @@ namespace PDSimAPI
             foreach (var parameter in effect.ParametersMap)
             {
 
-                parametersList.Add(actionInstance.parameters[parameter].Symbol);
+                parametersList.Add(actionInstance.parameters[parameter].ToString());
             }
 
             var fluent = ExpressionModelFactory.CreateGroundFluent(effect.EffectExpression.Fluent.FluentName, parametersList);
